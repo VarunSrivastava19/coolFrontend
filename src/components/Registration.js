@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { appTheme } from "../themes/theme";
 import { 
   AppBar,
@@ -56,10 +56,6 @@ function Registration() {
       password <${formValues.password}>
       confirmPassword <${formValues.confirmPassword}>
     `);
-
-    // axios
-    axios.defaults.baseURL = 'http://localhost:8080';
-    // useEffect(() => )
     axios.post('/register', {
       "email":formValues.email,
       "password":formValues.password,
@@ -67,6 +63,7 @@ function Registration() {
       "age":formValues.age
     }).then((response) => {
       console.log(`Axios <POST(db) ${response.status}>`);
+      // TODO: CHECK STATUS === 201 <CREATED> THEN LOAD TO `\` OR `login`.
     }).catch((error) => console.log("Axios <POST(DB)> Error: ", error))
     // console.log(`<[VALIDATOR] ${validate(formValues.password, formValues.confirmPassword)}>`);
   };
