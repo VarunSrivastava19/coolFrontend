@@ -1,0 +1,12 @@
+{
+  !validate(formValues.password, formValues.confirmPassword) ?
+    <Grid item>
+      Incorrrect or empty passwords
+      <Link to= '/'>
+        <Button variant='outlined' color='secondary' type='reset'>
+          RESET
+        </Button>
+      </Link>
+    </Grid>
+  : 
+}

@@ -1,7 +1,16 @@
 .App {
   text-align: center;
 }
-
+.flexClass {
+  display: flex;
+}
+form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1.5em;
+}
 .App-logo {
   height: 40vmin;
   pointer-events: none;
