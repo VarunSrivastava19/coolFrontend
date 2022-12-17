@@ -21,7 +21,7 @@ function Form({login, handleLoggedState, handleClose}) {
       "password": loginValues.password
     }).then((response) => {
       console.log(`AXIOS POST(login) <${response.status}>`);
-      if(response.status === 200) {
+      if(response.status === 202) {
         const token = response.data.token; //LOGIN TOKEN
         handleLoggedState();
         handleClose();

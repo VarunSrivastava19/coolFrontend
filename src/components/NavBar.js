@@ -19,53 +19,48 @@ import ListItemText from '@mui/material/ListItemText';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import Collapse from '@mui/material/Collapse';
-import { Link } from 'react-router-dom';
-
-// import Test from './Test.js';
+import { Link, Route, Routes, useNavigate } from 'react-router-dom';
 import LoginDialog from './LoginDialog';
+
+
 const pages = ['Collges', 'Exam', 'Scholarships'];
 const scholarships = ['Government', 'Private', 'International'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const [scholarMenu, setScholarMenu] = React.useState(null);
-  const [loggedIn, setLoggedIn] = React.useState(false);
-  const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
-  };
-
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
 
+  const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-
-  const handleLoggedState = () => {
-    setLoggedIn((prev) => !prev);
-  }
-  //TODO:Add Dropdown for Scholarship nav item in Desktop {scholarMenu}
+  const [scholarMenu, setScholarMenu] = React.useState(null);
   const handleScholarOpenNavMenu = (event) => {
     setScholarMenu(event.currentTarget);
   };
   const handleScholarCloseNavMenu = () => {
     setScholarMenu(null);
   };
-  // For Drawer component:
+  const [loggedIn, setLoggedIn] = React.useState(false);
+  const handleLoggedState = () => {
+    setLoggedIn((prev) => !prev);
+
+  }
+  const [open, setOpen] = React.useState(false);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
   const [drawerState, setDrawerState] = React.useState({
     top: false,
     left: false,
@@ -83,7 +78,6 @@ function ResponsiveAppBar() {
   const toggleScholarBox = () => {
     setScholarState((prev) => !prev)
   };
-  // console.log(`loggedIn - <${loggedIn}>`);
   const list = (anchor) => (
     
     <Box
@@ -256,9 +250,14 @@ function ResponsiveAppBar() {
               open={Boolean(scholarMenu)}
               onClose={handleScholarCloseNavMenu}
             >
-              {scholarships.map((scholarship) => (
+              {scholarships.map((scholarship, idx) => (
                 <MenuItem key={scholarship} onClick={handleScholarCloseNavMenu}>
-                  <Typography color="secondary" textAlign="center">{scholarship}</Typography>
+                  {
+                    idx === 1 ?
+                      <Typography color="secondary" textAlign="center"><a href='/private'>{scholarship}</a></Typography>
+                    :
+                      <Typography color="secondary" textAlign="center">{scholarship}</Typography>
+                  }
                 </MenuItem>
               ))}
             </Menu>
