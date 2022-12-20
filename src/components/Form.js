@@ -4,7 +4,10 @@ import TextField from '@mui/material/TextField';
 import CloseIcon from '@mui/icons-material/Close';
 import { Alert, AlertTitle, Paper, Typography, Collapse, IconButton } from '@mui/material';
 import Button from '@mui/material/Button';
+import Cookies from "universal-cookie";
 import axios from 'axios';
+
+const cookies = new Cookies();
 const defaultValues = {
   "email": "",
   "password": "",
@@ -23,6 +26,7 @@ function Form({login, handleLoggedState, handleClose}) {
       console.log(`AXIOS POST(login) <${response.status}>`);
       if(response.status === 202) {
         const token = response.data.token; //LOGIN TOKEN
+        cookies.set("TOKEN", token, { path: "/" });
         handleLoggedState();
         handleClose();
       } else {

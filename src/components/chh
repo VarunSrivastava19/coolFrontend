@@ -1,12 +1,54 @@
-{
-  !validate(formValues.password, formValues.confirmPassword) ?
-    <Grid item>
-      Incorrrect or empty passwords
-      <Link to= '/'>
-        <Button variant='outlined' color='secondary' type='reset'>
-          RESET
-        </Button>
-      </Link>
-    </Grid>
-  : 
-}
+token === null ? 
+<Box className="flexClass" sx={{display: "flex", flexDirection: "row", justifyContent: "center", }}>
+  <Box sx={{ flexGrow: 0 , pr: 1, alignSelf: "flex-start"}}>
+    {/* TODO:LOGIN BUTTON */}
+    <Button variant="outlined" onClick={handleClickOpen} color="secondary">
+      Login
+    </Button>
+    {/* TODO:LOGIN BUTTON */}
+  </Box>  
+  <Box sx={{ flexGrow: 0 , pr: 1}}>
+    {/* TODO:LOGIN BUTTON */}
+    <Link to={`/registration`}>
+      <Button variant="contained" color="primary">
+        Register
+      </Button>
+    </Link>
+    {/* TODO:LOGIN BUTTON */}
+  </Box> 
+</Box>
+:
+<Box sx={{ flexGrow: 0 }}>
+  <Tooltip title="Open settings">
+    <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+      <Avatar alt="" src="/static/images/avatar/2.jpg" />
+    </IconButton>
+  </Tooltip>
+  <Menu
+    sx={{ mt: '45px' }}
+    id="menu-appbar"
+    anchorEl={anchorElUser}
+    anchorOrigin={{
+      vertical: 'top',
+      horizontal: 'right',
+    }}
+    keepMounted
+    transformOrigin={{
+      vertical: 'top',
+      horizontal: 'right',
+    }}
+    open={Boolean(anchorElUser)}
+    onClose={handleCloseUserMenu}
+  >
+    {settings.map((setting, idx) => (
+      idx === 3 ?
+      <MenuItem key={setting} onClick={handleLoggedOutState}>
+        <Typography textAlign="center">{setting}</Typography>
+      </MenuItem>
+      : <MenuItem key={setting} onClick={handleCloseUserMenu}>
+        <Typography textAlign="center">{setting}</Typography>
+      </MenuItem>
+    ))}
+    
+  </Menu>
+</Box>

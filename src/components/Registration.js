@@ -62,8 +62,11 @@ function Registration() {
       "name":formValues.name,
       "age":formValues.age
     }).then((response) => {
-      console.log(`Axios <POST(db) ${response.status}>`);
-      // TODO: CHECK STATUS === 201 <CREATED> THEN LOAD TO `\` OR `login`.
+      // console.log(`Axios <POST(db) ${response.status}>`);
+      if(response.status === 201) {
+        window.location.href = "/"
+      }
+      // TODO: CHECK STATUS === 201 <CREATED> THEN LOAD TO `\` OR `login`
     }).catch((error) => console.log("Axios <POST(DB)> Error: ", error))
     // console.log(`<[VALIDATOR] ${validate(formValues.password, formValues.confirmPassword)}>`);
   };

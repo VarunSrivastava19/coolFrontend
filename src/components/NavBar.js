@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -19,49 +19,34 @@ import ListItemText from '@mui/material/ListItemText';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import Collapse from '@mui/material/Collapse';
-import { Link, Route, Routes, useNavigate } from 'react-router-dom';
+import { Link, } from 'react-router-dom';
 import LoginDialog from './LoginDialog';
+import Cookies from "universal-cookie";
+const cookies = new Cookies();
 
+const token = cookies.get("TOKEN"); 
 
-const pages = ['Collges', 'Exam', 'Scholarships'];
+const pages = ['Colleges', 'Exam', 'Scholarships'];
 const scholarships = ['Government', 'Private', 'International'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
-function ResponsiveAppBar() {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
-  };
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
 
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
+function ResponsiveAppBar({loggedIn, handleLoggedState, handleLoggedOutState, open, handleClickOpen, handleClose}) {
+  const [anchorElUser, setAnchorElUser] = useState(null);
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-  const [scholarMenu, setScholarMenu] = React.useState(null);
+  const [scholarMenu, setScholarMenu] = useState(null);
   const handleScholarOpenNavMenu = (event) => {
     setScholarMenu(event.currentTarget);
   };
   const handleScholarCloseNavMenu = () => {
     setScholarMenu(null);
   };
-  const [loggedIn, setLoggedIn] = React.useState(false);
-  const handleLoggedState = () => {
-    setLoggedIn((prev) => !prev);
-
-  }
-  const [open, setOpen] = React.useState(false);
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
-  const [drawerState, setDrawerState] = React.useState({
+  
+  const [drawerState, setDrawerState] = useState({
     top: false,
     left: false,
     bottom: false,
@@ -74,16 +59,16 @@ function ResponsiveAppBar() {
     setDrawerState({...drawerState, [anchor]: open});
   };
 
-  const [scholarState, setScholarState] = React.useState(true);
+  const [scholarState, setScholarState] = useState(true);
   const toggleScholarBox = () => {
     setScholarState((prev) => !prev)
   };
+
   const list = (anchor) => (
     
     <Box
       sx={{width: 250}}
       role="presentation"
-      // onClick={toggleDrawer(anchor, false)}
       onClick={scholarState ? toggleDrawer(anchor, false) : null}
       onKeyDown={toggleDrawer(anchor, false)}
     >
@@ -114,9 +99,14 @@ function ResponsiveAppBar() {
           sx={{pl: 1}}
         >
           {
-            scholarships.map(scholarship => (
+            scholarships.map((scholarship, idx) => (
               <ListItem key={scholarship} disablePadding>
-                <ListItemButton><ListItemText sx={{mr: 3}} primary={scholarship} /></ListItemButton>
+                {
+                  idx === 1 ?
+                    <ListItemButton><Link to='/private'><ListItemText sx={{mr: 3}} primary={scholarship} /></Link></ListItemButton>
+                  :
+                    <ListItemButton><ListItemText sx={{mr: 3}} primary={scholarship} /></ListItemButton>
+                }
               </ListItem>
             ))
           }
@@ -125,16 +115,21 @@ function ResponsiveAppBar() {
 
       <Divider />
       {
-        loggedIn ? 
+        (token !== null) ?
         <List>
         {
           settings.map((option, idx) => (
             <ListItem key={option} disablePadding>
               {
-                idx === 3 ?
-                <ListItemButton onClick={handleLoggedState}>
-                  <ListItemText primary={option} />
-                </ListItemButton>
+                (idx === 3) ?
+                  (typeof token === "undefined") ?
+                  <ListItemButton onClick={handleClickOpen}>
+                    <ListItemText primary="Login" />
+                  </ListItemButton>
+                  :
+                  <ListItemButton onClick={handleLoggedOutState}>
+                    <ListItemText primary={option} />
+                  </ListItemButton>
                 :
                 <ListItemButton>
                   <ListItemText primary={option} />
@@ -254,7 +249,7 @@ function ResponsiveAppBar() {
                 <MenuItem key={scholarship} onClick={handleScholarCloseNavMenu}>
                   {
                     idx === 1 ?
-                      <Typography color="secondary" textAlign="center"><a href='/private'>{scholarship}</a></Typography>
+                      <Typography color="secondary" textAlign="center"><Link to='/private'>{scholarship}</Link></Typography>
                     :
                       <Typography color="secondary" textAlign="center">{scholarship}</Typography>
                   }
@@ -263,7 +258,7 @@ function ResponsiveAppBar() {
             </Menu>
             {/* MENU */}
           </Box>
-          {!loggedIn ? 
+          {typeof token === "undefined" ? 
           <Box className="flexClass" sx={{display: "flex", flexDirection: "row", justifyContent: "center", }}>
             <Box sx={{ flexGrow: 0 , pr: 1, alignSelf: "flex-start"}}>
               {/* TODO:LOGIN BUTTON */}
@@ -307,7 +302,7 @@ function ResponsiveAppBar() {
             >
               {settings.map((setting, idx) => (
                 idx === 3 ?
-                <MenuItem key={setting} onClick={handleLoggedState}>
+                <MenuItem key={setting} onClick={handleLoggedOutState}>
                   <Typography textAlign="center">{setting}</Typography>
                 </MenuItem>
                 : <MenuItem key={setting} onClick={handleCloseUserMenu}>
